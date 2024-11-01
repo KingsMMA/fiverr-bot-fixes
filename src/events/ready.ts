@@ -6,16 +6,6 @@ import { buildCheckinLeaderboardEmbed, buildPointsLeaderboardEmbed } from "../fu
 import { PrismaClient } from "@prisma/client";
 import resetCheckins from "../functions/resetCheckins";
 
-// export async function updateLeaderboard(prisma: PrismaClient, guild: Guild) {
-//     const settings = await prisma.setting.findFirst();
-//     const { leaderboardChannelID, leaderboardMessageID } = settings!;
-//     const channel = (await guild.channels.fetch(leaderboardChannelID)) as TextChannel;
-//     const message = await channel.messages.fetch(leaderboardMessageID);
-//     const pointsEmbed = await buildPointsLeaderboardEmbed(prisma);
-//     const checkinEmbed = await buildCheckinLeaderboardEmbed(prisma);
-//     await message.edit({ embeds: [pointsEmbed, checkinEmbed] }).catch(console.error);
-// }
-
 const event: BotEvent = {
     name: "ready",
     once: true,
@@ -34,13 +24,6 @@ const event: BotEvent = {
         client.cache.set("checkinChannelID", checkinChannelID);
         client.cache.set("shopMessageID", shopMessageID);
 
-        // await updateLeaderboard(prisma, guild);
-
-        // cron.schedule("*/10 * * * *", async () => {
-        //     await updateLeaderboard(prisma, guild);
-        // });
-
-        // run a cron job to reset checkins every day at 8am
         cron.schedule(
             "0 8 * * *",
             async () => {

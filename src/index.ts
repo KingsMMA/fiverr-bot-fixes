@@ -31,16 +31,12 @@ const client = new Client({
     partials: [Partials.Channel, Partials.Message, Partials.Reaction]
 });
 
-// handle chalk
 client.chalk = chalk;
 
-// handle cache
 client.cache = new NodeCache();
 
-// handle prisma
 client.prisma = new PrismaClient();
 
-// handle slash commands
 client.slashCommands = new Collection<string, SlashCommand>();
 const slashCommandsPath = path.join(__dirname, `slash-commands`);
 const slashCommandFiles = fs.readdirSync(slashCommandsPath).filter((file) => file.endsWith(`.js`));
@@ -52,7 +48,6 @@ for (const file of slashCommandFiles) {
     commands.push(command.command.toJSON());
 }
 
-// handle buttons
 client.buttons = new Collection<string, Button>();
 const buttonsPath = path.join(__dirname, `buttons`);
 const buttonsFiles = fs.readdirSync(buttonsPath).filter((file) => file.endsWith(`.js`));
@@ -68,7 +63,7 @@ const rest = new REST().setToken(process.env.TOKEN);
         console.log(
             `${client.chalk.magenta("[index]:")} started refreshing ${commands.length} application (/) commands.`
         );
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+
         const data: any = await rest.put(Routes.applicationGuildCommands(process.env.CLIENT_ID, process.env.GUILD_ID), {
             body: commands
         });
@@ -80,7 +75,6 @@ const rest = new REST().setToken(process.env.TOKEN);
     }
 })();
 
-// handle events
 const eventsPath = path.join(__dirname, `events`);
 const eventFiles = fs.readdirSync(eventsPath).filter((file) => file.endsWith(`.js`));
 for (const file of eventFiles) {

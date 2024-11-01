@@ -63,8 +63,9 @@ model Player {
   discordID  String @id
   discordTag String
 
-  dobbyPoints   Int @default(0)
-  checkinStreak Int @default(0)
+  dobbyPoints    Int @default(0)
+  checkinStreak  Int @default(0)
+  previousStreak Int @default(0)
 
   isCheckedIn Boolean @default(false)
   isClaimed   Boolean @default(false)
@@ -134,4 +135,45 @@ model Item {
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+}
+
+model Event {
+  id        Int       @id @default(autoincrement())
+  code      String    @unique
+  type      EventType
+  startTime DateTime
+  endTime   DateTime?
+  duration  Int?
+
+  channelId   String
+  channelName String
+
+  hostId  String
+  hostTag String
+
+  attendeeCount Int @default(0)
+
+  attendees EventAttendee[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model EventAttendee {
+  id      Int   @id @default(autoincrement())
+  event   Event @relation(fields: [eventId], references: [id])
+  eventId Int
+
+  userId  String
+  userTag String
+
+  joinTime  DateTime
+  leaveTime DateTime?
+
+  @@unique([eventId, userId])
+}
+
+enum EventType {
+  LECTURE
+  OFFICE_HOURS
 }

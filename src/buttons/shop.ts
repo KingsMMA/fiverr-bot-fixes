@@ -47,7 +47,6 @@ const button: Button = {
                 return;
             }
 
-            // check if player has enough points
             if (player.dobbyPoints < item.price) {
                 interaction
                     .editReply({
@@ -58,13 +57,11 @@ const button: Button = {
                 return;
             }
 
-            // remove price from user
             await prisma.player.update({
                 where: { discordID },
                 data: { dobbyPoints: { decrement: item.price } }
             });
 
-            // give role reward if any
             if (item.role) {
                 await member.roles.add(item.role).catch(async () => {
                     await log({
@@ -75,18 +72,15 @@ const button: Button = {
                 });
             }
 
-            // notify user
             const userContent = `${userMention(discordID)},\n${item.userMessage}`;
             await interaction.editReply({ content: userContent, components: [] }).catch(console.error);
 
-            // notify staff
             const staffContent = `${item.staffPing}\n${item.staffMessage}\n${userMention(
                 discordID
             )} | \`${discordID}\` | \`@${discordTag}\`\n${userContent}`;
             const staffChannel = (await guild.channels.fetch(staffCHannelID)) as TextChannel;
             await staffChannel.send({ content: staffContent }).catch(console.error);
 
-            // log event
             await log({ title: `${item.title} Bought`, content: staffContent, color: "Green" });
         });
 

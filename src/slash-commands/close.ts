@@ -29,7 +29,6 @@ const command: SlashCommand = {
             const channel = interaction.channel as TextChannel;
             const member = interaction.member as GuildMember;
 
-            // checks if channel is valid
             if (channel.id !== lectureChannelID) {
                 throw Error(`You can only use this command in ${channelMention(lectureChannelID)}!`);
             }
@@ -39,7 +38,6 @@ const command: SlashCommand = {
                 throw Error(`You are not allowed to use this command!`);
             }
 
-            // checks if lecture is currently open
             if (!isLectureOngoing) {
                 throw Error(`No lecture is currently ongoing! Please \`/open\` one lecture first!`);
             }

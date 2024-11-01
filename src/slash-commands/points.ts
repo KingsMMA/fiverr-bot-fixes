@@ -20,7 +20,6 @@ const command: SlashCommand = {
             const guild = interaction.guild!;
             const member = await guild.members.fetch(user.id);
 
-            // checks if channel is valid
             if (channel.id !== commandsChannelID) {
                 throw Error(`You can only use this command in ${channelMention(commandsChannelID)}!`);
             }

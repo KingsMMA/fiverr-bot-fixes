@@ -16,7 +16,6 @@ const command: SlashCommand = {
             const guild = interaction.guild!;
             const member = interaction.member as GuildMember;
 
-            // checks if channel is valid
             if (channel.id !== checkinChannelID) {
                 throw Error(`You can only use this command in ${channelMention(checkinChannelID)}!`);
             }

@@ -23,7 +23,6 @@ const event: BotEvent = {
 
             if (message.channel.id !== checkinChannelID) return;
 
-            // check if user has checked in today
             const prisma = message.client.prisma;
             const settings = await prisma.setting.findFirst();
             const { checkinRewards, checkinMinimumMsgLength } = settings!;
@@ -44,12 +43,10 @@ const event: BotEvent = {
                 }
             });
 
-            // check if player has already checked in today
             if (player.isCheckedIn) {
                 throw Error("You have already checked in today!");
             }
 
-            // check if message length is too short
             if (message.content.length < checkinMinimumMsgLength) {
                 throw Error(`Your check-in must be at least ${checkinMinimumMsgLength} characters long`);
             }
