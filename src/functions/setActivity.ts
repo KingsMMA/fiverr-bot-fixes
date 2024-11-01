@@ -3,7 +3,6 @@ import { ActivityType, Client } from "discord.js";
 export default async function setActivity(client: Client) {
     return new Promise<void>(async (resolve, reject) => {
         try {
-            // sets the bot activity
             const setting = await client.prisma.setting.upsert({
                 where: {
                     id: 1

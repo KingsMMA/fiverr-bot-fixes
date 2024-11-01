@@ -14,17 +14,14 @@ const command: SlashCommand = {
             const { lectureChannelID, lectureRewards, isLectureOngoing } = settings!;
             const channel = interaction.channel as TextChannel;
 
-            // checks if channel is valid
             if (channel.id !== lectureChannelID) {
                 throw Error(`You can only use this command in ${channelMention(lectureChannelID)}!`);
             }
 
-            // checks if lecture is currently open
             if (!isLectureOngoing) {
                 throw Error(`No lecture is currently ongoing!`);
             }
 
-            // check if user has already claimed
             const discordID = interaction.user.id;
             const discordTag = interaction.user.tag;
             const player = await prisma.player.upsert({
@@ -43,9 +40,7 @@ const command: SlashCommand = {
                 data: { isClaimed: true, dobbyPoints: { increment: lectureRewards } }
             });
 
-            const content = `${userMention(
-                interaction.user.id
-            )} claimed their \`${lectureRewards}\` ${POINTS_EMOJI} points!`;
+            const content = `${userMention(discordID)} claimed their \`${lectureRewards}\` ${POINTS_EMOJI} points!`;
 
             await interaction.editReply({ content });
             await log({

@@ -50,7 +50,6 @@ const command: SlashCommand = {
             const { teamRoleID } = settings!;
             const member = interaction.member as GuildMember;
 
-            // check if user is staff
             const isStaff = checkStaff(member, teamRoleID);
             if (!isStaff) {
                 throw Error(`You are not allowed to use this command!`);
@@ -114,7 +113,6 @@ const command: SlashCommand = {
                     return;
                 }
 
-                // store in database
                 const bet = await prisma.bet.create({
                     data: {
                         creatorID: member.id,
@@ -125,7 +123,6 @@ const command: SlashCommand = {
                     }
                 });
 
-                // create the embed
                 const { embed, component } = await buildBetMessage(bet.id, prisma, interaction.guild!);
                 const message = await channel.send({ embeds: [embed], components: [component] });
                 await prisma.bet.update({
@@ -211,7 +208,6 @@ const command: SlashCommand = {
                 const winningOptionsAmounts = [];
                 const winners: { discordID: string; winnings: number }[] = [];
                 for (let i = 0; i < winningOptions.length; i++) {
-                    // compute total winnings for this option pool given their contribution to the total pool
                     const winningOptionId = winningOptions[i];
                     const winningOption = betData.find((j) => j.optionId == winningOptionId)!;
                     const totalOptionWinnings = (winningOption.totalAmount / totalWinningPoolAmount) * totalPoolAmount;
@@ -220,7 +216,6 @@ const command: SlashCommand = {
 
                     console.log(winningOption.optionIndex, totalOptionWinnings);
 
-                    // distribute winnings to users with valid bets
                     const validBets = bets.filter((bet) => bet.optionIndex == winningOption.optionIndex);
                     promises.push(
                         validBets.map((validBet) => {
@@ -249,7 +244,6 @@ const command: SlashCommand = {
                     )
                     .join("\n");
 
-                // update bet
                 await prisma.bet.update({
                     where: { id: betID },
                     data: {
@@ -266,7 +260,6 @@ const command: SlashCommand = {
 
                 const winningOptionsText = winningOptions.map((option) => options[option]).join(" | ");
 
-                // log event
                 const content = `${userMention(member.id)} closed a bet in ${
                     message.url
                 }!\nTitle: ${title}\nDescription: ${description}\nOptions: ${options.join(

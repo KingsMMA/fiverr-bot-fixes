@@ -30,7 +30,7 @@ export interface Command {
 export interface BotEvent {
     name: string;
     once?: boolean | false;
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+
     execute: (...args: any) => void;
 }
 

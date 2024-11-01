@@ -3,12 +3,12 @@ import { POINTS_EMOJI } from "../config";
 import dayjs from "../utils/dayjs";
 import { PrismaClient } from "@prisma/client";
 
-export default function buildCheckinEmbed(prisma: PrismaClient) {
+export default function (prisma: PrismaClient) {
     return new Promise<EmbedBuilder>(async (resolve) => {
         const settings = await prisma.setting.findFirst();
         const { checkinTargetRoleID, checkinTargetCount, checkinRewards } = settings!;
         const now = dayjs().tz("America/New_York").hour(8).minute(0).second(0).millisecond(0);
-        const next = now.add(1, "day").tz("America/New_York");
+        const next = now.add(1, "day").utc();
 
         const embed = new EmbedBuilder()
             .setColor("Random")

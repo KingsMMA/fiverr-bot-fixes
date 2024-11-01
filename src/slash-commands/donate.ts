@@ -21,7 +21,6 @@ const command: SlashCommand = {
 
             const channel = interaction.channel as TextChannel;
 
-            // checks if channel is valid
             if (channel.id !== commandsChannelID) {
                 throw Error(`You can only use this command in ${channelMention(commandsChannelID)}!`);
             }
@@ -33,20 +32,18 @@ const command: SlashCommand = {
             });
 
             const amount = interaction.options.getInteger("amount", true);
-            // check if sender has enough dobby points
+
             if (sender.dobbyPoints < amount) {
                 throw Error(`You don't have enough dobby points to donate \`${amount}\` ${POINTS_EMOJI}!`);
             }
 
             const user = interaction.options.getUser("user", true);
 
-            // remove from sender
             await prisma.player.update({
                 where: { discordID: interaction.user.id },
                 data: { dobbyPoints: { decrement: amount } }
             });
 
-            // add to receiver
             await prisma.player.upsert({
                 where: {
                     discordID: user.id

@@ -12,7 +12,6 @@ const command: SlashCommand = {
         const { teamRoleID } = settings!;
         const member = interaction.member as GuildMember;
 
-        // check if user is staff
         const isStaff = checkStaff(member, teamRoleID);
 
         const commandsPath = __dirname;
@@ -26,7 +25,7 @@ const command: SlashCommand = {
 
         for (const file of commandFiles) {
             const filePath = path.join(commandsPath, file);
-            // eslint-disable-next-line @typescript-eslint/no-var-requires
+
             const command: SlashCommand = require(filePath).default;
 
             const commandName = command.command.name.toString();
