@@ -5,8 +5,8 @@ async function main() {
         where: { id: 1 },
         update: {},
         create: {
-            activityName: "Discord",
-            activityType: "Playing"
+            activityname: "Discord",
+            activitytype: "Playing"
         }
     });
     console.log({ setting });
