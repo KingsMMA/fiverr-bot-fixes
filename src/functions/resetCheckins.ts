@@ -11,7 +11,7 @@ export default async function resetCheckins(prisma: PrismaClient, guild: Guild) 
             return resolve();
         }
 
-        const channel = (await guild.channels.fetch(settings.checkinChannelID)) as TextChannel;
+        const channel = (await guild.channels.fetch(settings.checkinchannelid)) as TextChannel;
         let fetched: Collection<Snowflake, Message>;
 
         do {
@@ -33,24 +33,24 @@ export default async function resetCheckins(prisma: PrismaClient, guild: Guild) 
         });
 
         const playersToReset = await prisma.player.findMany({
-            where: { isCheckedIn: false, checkinStreak: { gt: 0 } },
+            where: { ischeckedin: false, checkinstreak: { gt: 0 } },
             select: {
-                discordID: true,
-                checkinStreak: true
+                discordid: true,
+                checkinstreak: true
             }
         });
 
         const notCheckedinPlayers = await prisma.player.updateMany({
-            where: { isCheckedIn: false, checkinStreak: { gt: 0 } },
+            where: { ischeckedin: false, checkinstreak: { gt: 0 } },
             data: {
-                checkinStreak: 0,
-                previousStreak: playersToReset[0]?.checkinStreak ?? 0
+                checkinstreak: 0,
+                previousstreak: playersToReset[0]?.checkinstreak ?? 0
             }
         });
 
         const checkedinPlayers = await prisma.player.updateMany({
-            where: { isCheckedIn: true },
-            data: { isCheckedIn: false }
+            where: { ischeckedin: true },
+            data: { ischeckedin: false }
         });
 
         const content = `

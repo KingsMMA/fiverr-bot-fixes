@@ -20,15 +20,15 @@ const event: BotEvent = {
         const guild = await client.guilds.fetch(process.env.GUILD_ID);
 
         const settings = await prisma.setting.findFirst();
-        const { checkinChannelID, shopMessageID } = settings!;
-        client.cache.set("checkinChannelID", checkinChannelID);
-        client.cache.set("shopMessageID", shopMessageID);
+        const { checkinchannelid, shopmessageid } = settings!;
+        client.cache.set("checkinChannelID", checkinchannelid);
+        client.cache.set("shopMessageID", shopmessageid);
 
         cron.schedule(
             "0 8 * * *",
             async () => {
                 const settings = await prisma.setting.findFirst();
-                if (settings!.resetCheckins) await resetCheckins(prisma, guild);
+                if (settings!.resetcheckins) await resetCheckins(prisma, guild);
             },
             { timezone: "America/New_York" }
         );

@@ -14,7 +14,7 @@ export default async function setActivity(client: Client) {
             });
 
             let activity;
-            switch (setting.activityType) {
+            switch (setting.activitytype) {
                 case "Playing":
                     activity = ActivityType.Playing;
                     break;
@@ -32,7 +32,7 @@ export default async function setActivity(client: Client) {
                     break;
             }
             await client.user!.setActivity({
-                name: setting.activityName,
+                name: setting.activityname,
                 type: activity
             });
             return resolve();

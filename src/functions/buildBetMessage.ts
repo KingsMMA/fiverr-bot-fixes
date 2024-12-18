@@ -13,15 +13,15 @@ export default async function buildBetMessage(betID: number, prisma: PrismaClien
         const {
             title,
             description,
-            createdAt,
+            createdat,
             options,
             bets,
             amounts,
-            creatorID,
-            isOpen,
-            winningOptionsIndices,
-            winningOptionsAmounts,
-            winnersText
+            creatorid,
+            isopen,
+            winningoptionsindices,
+            winningoptionsamounts,
+            winnerstext
         } = bet!;
 
         let totalPoolAmount = 0;
@@ -42,8 +42,8 @@ export default async function buildBetMessage(betID: number, prisma: PrismaClien
 
         const fields: APIEmbedField[] = betData.map((betData, i) => {
             const emojiCount = Math.floor((betData.totalCount / maxAmount) * 10);
-            const isWinner = winningOptionsIndices.includes(i);
-            const winningAmount = winningOptionsAmounts[winningOptionsIndices.indexOf(i)];
+            const isWinner = winningoptionsindices.includes(i);
+            const winningAmount = winningoptionsamounts[winningoptionsindices.indexOf(i)];
             return {
                 name: `\`[${i + 1}]\` ${betData.option} - ${betData.totalCount} bets ${
                     isWinner ? `✅ ${winningAmount.toFixed(2)} ${POINTS_EMOJI}` : ""
@@ -55,24 +55,24 @@ export default async function buildBetMessage(betID: number, prisma: PrismaClien
 
         const amountsText = amounts.map((amount) => `${amount} ${POINTS_EMOJI}`).join(" | ");
 
-        const member = await guild.members.fetch(creatorID);
+        const member = await guild.members.fetch(creatorid);
 
         let embedDescription = `${description}`;
 
         embedDescription += `\n\n**Bet Amounts:**\n${amountsText}`;
         embedDescription += `\n\n**Total Pool Amount:** ${totalPoolAmount} ${POINTS_EMOJI}`;
 
-        if (!isOpen) {
-            embedDescription += `\n\n**Top Winners:**\n${winnersText}`;
+        if (!isopen) {
+            embedDescription += `\n\n**Top Winners:**\n${winnerstext}`;
         }
 
         const embed = new EmbedBuilder()
-            .setColor(isOpen ? "Green" : "Red")
+            .setColor(isopen ? "Green" : "Red")
             .setTitle(title)
             .setAuthor({ name: member.displayName, iconURL: member.user.displayAvatarURL() })
             .setFooter({ text: `Bet ID: #${betID}`, iconURL: guild.iconURL()! })
             .setDescription(embedDescription)
-            .setTimestamp(createdAt)
+            .setTimestamp(createdat)
             .setFields(fields)
             .setThumbnail(guild.iconURL());
 

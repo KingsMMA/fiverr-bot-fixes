@@ -25,52 +25,52 @@ const event: BotEvent = {
 
             const prisma = message.client.prisma;
             const settings = await prisma.setting.findFirst();
-            const { checkinRewards, checkinMinimumMsgLength } = settings!;
-            const discordID = message.author.id;
-            const discordTag = message.author.tag;
+            const { checkinrewards, checkinminimummsglength } = settings!;
+            const discordid = message.author.id;
+            const discordtag = message.author.tag;
 
             const player = await prisma.player.upsert({
                 where: {
-                    discordID,
-                    discordTag
+                    discordid,
+                    discordtag
                 },
                 create: {
-                    discordID,
-                    discordTag
+                    discordid,
+                    discordtag
                 },
                 update: {
-                    discordTag
+                    discordtag
                 }
             });
 
-            if (player.isCheckedIn) {
+            if (player.ischeckedin) {
                 throw Error("You have already checked in today!");
             }
 
-            if (message.content.length < checkinMinimumMsgLength) {
-                throw Error(`Your check-in must be at least ${checkinMinimumMsgLength} characters long`);
+            if (message.content.length < checkinminimummsglength) {
+                throw Error(`Your check-in must be at least ${checkinminimummsglength} characters long`);
             }
 
-            const newStreak = player.checkinStreak + 1;
+            const newStreak = player.checkinstreak + 1;
 
             await prisma.player.update({
                 where: {
-                    discordID
+                    discordid
                 },
                 data: {
-                    isCheckedIn: true,
-                    dobbyPoints: {
-                        increment: checkinRewards
+                    ischeckedin: true,
+                    dobbypoints: {
+                        increment: checkinrewards
                     },
-                    checkinStreak: newStreak
+                    checkinstreak: newStreak
                 }
             });
 
             await message.react(POINTS_EMOJI).catch(console.error);
 
             const content = `${userMention(
-                discordID
-            )} has checked in for ${newStreak} consecutive day(s) and been awarded ${checkinRewards} ${POINTS_EMOJI} points`;
+                discordid
+            )} has checked in for ${newStreak} consecutive day(s) and been awarded ${checkinrewards} ${POINTS_EMOJI} points`;
 
             await log({ title: "Check-in", content, color: "Orange" });
             const msg = await message.reply({ content: `${content}` });

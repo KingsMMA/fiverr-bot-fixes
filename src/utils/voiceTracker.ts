@@ -38,7 +38,7 @@ export function startVoiceTracking(eventId: number, channelId: string, client: C
                 });
             }
         }
-        
+
         // User left the tracked channel
         if (oldState.channelId === channelId && newState.channelId !== channelId) {
             await client.prisma.eventAttendee.updateMany({

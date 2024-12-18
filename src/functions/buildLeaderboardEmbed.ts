@@ -4,7 +4,7 @@ import { POINTS_EMOJI } from "../config";
 
 export function buildPointsLeaderboardEmbed(prisma: PrismaClient) {
     return new Promise<EmbedBuilder>(async (resolve) => {
-        const players = await prisma.player.findMany({ orderBy: { dobbyPoints: "desc" }, take: 10 });
+        const players = await prisma.player.findMany({ orderBy: { dobbypoints: "desc" }, take: 10 });
 
         const rankedPlayers = players.map((player, index) => {
             return {
@@ -19,8 +19,8 @@ export function buildPointsLeaderboardEmbed(prisma: PrismaClient) {
             text = `No players found!`;
         } else {
             for (const player of rankedPlayers) {
-                text += `**${player.rank}.** ${userMention(player.discordID)} - \`${
-                    player.dobbyPoints
+                text += `**${player.rank}.** ${userMention(player.discordid)} - \`${
+                    player.dobbypoints
                 }\` ${POINTS_EMOJI}\n`;
             }
         }
@@ -36,7 +36,7 @@ export function buildPointsLeaderboardEmbed(prisma: PrismaClient) {
 
 export function buildCheckinLeaderboardEmbed(prisma: PrismaClient) {
     return new Promise<EmbedBuilder>(async (resolve) => {
-        const players = await prisma.player.findMany({ orderBy: { checkinStreak: "desc" }, take: 10 });
+        const players = await prisma.player.findMany({ orderBy: { checkinstreak: "desc" }, take: 10 });
 
         const rankedPlayers = players.map((player, index) => {
             return {
@@ -51,7 +51,7 @@ export function buildCheckinLeaderboardEmbed(prisma: PrismaClient) {
             text = `No players found!`;
         } else {
             for (const player of rankedPlayers) {
-                text += `**${player.rank}.** ${userMention(player.discordID)} - \`${player.checkinStreak}\` days \n`;
+                text += `**${player.rank}.** ${userMention(player.discordid)} - \`${player.checkinstreak}\` days \n`;
             }
         }
 

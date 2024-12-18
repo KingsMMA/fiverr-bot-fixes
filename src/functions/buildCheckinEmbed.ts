@@ -6,7 +6,7 @@ import { PrismaClient } from "@prisma/client";
 export default function (prisma: PrismaClient) {
     return new Promise<EmbedBuilder>(async (resolve) => {
         const settings = await prisma.setting.findFirst();
-        const { checkinTargetRoleID, checkinTargetCount, checkinRewards } = settings!;
+        const { checkintargetroleid, checkintargetcount, checkinrewards } = settings!;
         const now = dayjs().tz("America/New_York").hour(8).minute(0).second(0).millisecond(0);
         const next = now.add(1, "day").utc();
 
@@ -14,10 +14,10 @@ export default function (prisma: PrismaClient) {
             .setColor("Random")
             .setTimestamp()
             .setTitle(`${POINTS_EMOJI} Check-in for ${now.format("MM/DD z")}`).setDescription(`
-If you write one comment underneath this you will gain ${checkinRewards} Dobby Points ${POINTS_EMOJI}.
+If you write one comment underneath this you will gain ${checkinrewards} Dobby Points ${POINTS_EMOJI}.
 
-If you check-in here for ${checkinTargetCount} consecutive periods, you'll earn ${roleMention(
-            checkinTargetRoleID
+If you check-in here for ${checkintargetcount} consecutive periods, you'll earn ${roleMention(
+            checkintargetroleid
         )} & **1 free month**.
 
 > Replies don't have to be high quality, but we do ask that you refrain from low-quality and if you must post something short that at the very least it's a full sentence. Can be whatever's on your mind or just something positive :)

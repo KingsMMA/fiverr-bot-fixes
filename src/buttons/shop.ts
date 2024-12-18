@@ -13,18 +13,18 @@ const button: Button = {
         await interaction.editReply({ components: [component] });
 
         const settings = await prisma.setting.findFirst();
-        const { lectureChannelID, staffCHannelID, checkinChannelID } = settings!;
+        const { lecturechannelid, staffchannelid, checkinchannelid } = settings!;
 
-        const discordID = interaction.user.id;
-        const discordTag = interaction.user.tag;
+        const discordid = interaction.user.id;
+        const discordtag = interaction.user.tag;
 
         const guild = interaction.guild!;
         const member = interaction.member as GuildMember;
 
         const player = await prisma.player.upsert({
-            where: { discordID },
-            create: { discordID, discordTag },
-            update: { discordTag }
+            where: { discordid },
+            create: { discordid, discordtag },
+            update: { discordtag }
         });
 
         const filter = (i: StringSelectMenuInteraction) => i.user.id == interaction.user.id;
@@ -50,7 +50,7 @@ const button: Button = {
             if (player.dobbyPoints < item.price) {
                 interaction
                     .editReply({
-                        content: insufficientText(discordID, checkinChannelID, lectureChannelID),
+                        content: insufficientText(discordid, checkinchannelid, lecturechannelid),
                         components: []
                     })
                     .catch(console.error);
@@ -58,27 +58,27 @@ const button: Button = {
             }
 
             await prisma.player.update({
-                where: { discordID },
-                data: { dobbyPoints: { decrement: item.price } }
+                where: { discordtag },
+                data: { dobbypoints: { decrement: item.price } }
             });
 
             if (item.role) {
                 await member.roles.add(item.role).catch(async () => {
                     await log({
                         title: "Role Reward Failed",
-                        content: `Failed to give role reward to ${userMention(discordID)}`,
+                        content: `Failed to give role reward to ${userMention(discordid)}`,
                         color: "Red"
                     });
                 });
             }
 
-            const userContent = `${userMention(discordID)},\n${item.userMessage}`;
+            const userContent = `${userMention(discordid)},\n${item.userMessage}`;
             await interaction.editReply({ content: userContent, components: [] }).catch(console.error);
 
             const staffContent = `${item.staffPing}\n${item.staffMessage}\n${userMention(
-                discordID
-            )} | \`${discordID}\` | \`@${discordTag}\`\n${userContent}`;
-            const staffChannel = (await guild.channels.fetch(staffCHannelID)) as TextChannel;
+                discordid
+            )} | \`${discordid}\` | \`@${discordtag}\`\n${userContent}`;
+            const staffChannel = (await guild.channels.fetch(staffchannelid)) as TextChannel;
             await staffChannel.send({ content: staffContent }).catch(console.error);
 
             await log({ title: `${item.title} Bought`, content: staffContent, color: "Green" });
