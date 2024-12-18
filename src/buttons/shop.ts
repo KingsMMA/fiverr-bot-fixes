@@ -13,7 +13,7 @@ const button: Button = {
         await interaction.editReply({ components: [component] });
 
         const settings = await prisma.setting.findFirst();
-        const { lectureChannelID, staffCHannelID, checkinChannelID } = settings!;
+        const { lectureChannelID, staffChannelID, checkinChannelID } = settings!;
 
         const discordID = interaction.user.id;
         const discordTag = interaction.user.tag;
@@ -78,7 +78,7 @@ const button: Button = {
             const staffContent = `${item.staffPing}\n${item.staffMessage}\n${userMention(
                 discordID
             )} | \`${discordID}\` | \`@${discordTag}\`\n${userContent}`;
-            const staffChannel = (await guild.channels.fetch(staffCHannelID)) as TextChannel;
+            const staffChannel = (await guild.channels.fetch(staffChannelID)) as TextChannel;
             await staffChannel.send({ content: staffContent }).catch(console.error);
 
             await log({ title: `${item.title} Bought`, content: staffContent, color: "Green" });

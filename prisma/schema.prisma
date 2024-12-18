@@ -33,7 +33,7 @@ model Setting {
 
   shopMessageID  String @default("")
   shopChannelID  String @default("")
-  staffCHannelID String @default("1265956930833354772")
+  staffChannelID String @default("1265956930833354772")
 
   oneEmojiPrice     Int @default(30)
   twoVipTicketPrice Int @default(250)
@@ -42,7 +42,7 @@ model Setting {
   fiveBadgePrice    Int @default(1000)
   sixSubPrice       Int @default(1250)
   sevenFlipperPrice Int @default(1000)
-  eigthHevinixPrice Int @default(1500)
+  eightHevinixPrice Int @default(1500)
   nineRpPrice       Int @default(2000)
 
   isLectureOngoing Boolean @default(false)

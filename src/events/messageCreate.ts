@@ -20,7 +20,6 @@ const event: BotEvent = {
 
         try {
             const checkinChannelID = message.client.cache.get("checkinChannelID") as string;
-
             if (message.channel.id !== checkinChannelID) return;
 
             const prisma = message.client.prisma;
