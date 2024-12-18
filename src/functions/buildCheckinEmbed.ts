@@ -6,7 +6,7 @@ import { PrismaClient } from "@prisma/client";
 export default function (prisma: PrismaClient) {
     return new Promise<EmbedBuilder>(async (resolve) => {
         const settings = await prisma.setting.findFirst();
-        const { checkinTargetRoleID, checkinTargetCount, checkinRewards } = settings!;
+        const { checkinTargetRoleID, checkinTargetCount, checkinRewards, checkinMinimumMsgLength } = settings!;
         const now = dayjs().tz("America/New_York").hour(8).minute(0).second(0).millisecond(0);
         const next = now.add(1, "day").utc();
 
@@ -22,7 +22,7 @@ If you check-in here for ${checkinTargetCount} consecutive periods, you'll earn 
 
 > Replies don't have to be high quality, but we do ask that you refrain from low-quality and if you must post something short that at the very least it's a full sentence. Can be whatever's on your mind or just something positive :)
 
-*Please note: Your check-in must be at least 25 characters long.*
+*Please note: Your check-in must be at least ${checkinMinimumMsgLength} characters long.*
 
 Check-ins will be reset ${time(next.toDate(), "R")}.
 `);
