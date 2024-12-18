@@ -5,6 +5,7 @@ import {
     Client,
     Collection,
     SlashCommandBuilder,
+    SlashCommandOptionsOnlyBuilder,
     SlashCommandSubcommandsOnlyBuilder
 } from "discord.js";
 import { type Chalk } from "chalk";
@@ -12,7 +13,7 @@ import NodeCache from "node-cache";
 import { PrismaClient } from "@prisma/client";
 
 export interface SlashCommand {
-    command: Omit<SlashCommandBuilder, "addSubcommandGroup" | "addSubcommand"> | SlashCommandSubcommandsOnlyBuilder;
+    command: Omit<SlashCommandBuilder, "addSubcommandGroup" | "addSubcommand"> | SlashCommandSubcommandsOnlyBuilder | SlashCommandOptionsOnlyBuilder;
     execute: (interaction: ChatInputCommandInteraction, client: Client) => void;
     autocomplete?: (interaction: AutocompleteInteraction) => void;
 }
