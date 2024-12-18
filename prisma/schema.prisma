@@ -10,8 +10,8 @@ datasource db {
 model Setting {
   id Int @id @default(1)
 
-  activitytype ActivityTextType @default(Playing)
-  activityname String           @default("LOL Dobby")
+  activityType ActivityTextType @default(Playing)
+  activityName String           @default("LOL Dobby")
 
   resetCheckins Boolean @default(false)
 
