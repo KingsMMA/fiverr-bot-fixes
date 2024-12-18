@@ -47,10 +47,10 @@ const command: SlashCommand = {
             await interaction.deferReply();
             const prisma = interaction.client.prisma;
             const settings = await prisma.setting.findFirst();
-            const { teamRoleID } = settings!;
+            const { teamroleid } = settings!;
             const member = interaction.member as GuildMember;
 
-            const isStaff = checkStaff(member, teamRoleID);
+            const isStaff = checkStaff(member, teamroleid);
             if (!isStaff) {
                 throw Error(`You are not allowed to use this command!`);
             }
@@ -115,7 +115,7 @@ const command: SlashCommand = {
 
                 const bet = await prisma.bet.create({
                     data: {
-                        creatorID: member.id,
+                        creatorid: member.id,
                         title,
                         description,
                         amounts,
@@ -127,7 +127,7 @@ const command: SlashCommand = {
                 const message = await channel.send({ embeds: [embed], components: [component] });
                 await prisma.bet.update({
                     where: { id: bet.id },
-                    data: { messageID: message.id, channelID: channel.id, messageUrl: message.url }
+                    data: { messageid: message.id, channelid: channel.id, messageurl: message.url }
                 });
 
                 const content = `${userMention(member.id)} opened a bet in ${
@@ -176,28 +176,28 @@ const command: SlashCommand = {
 
                 const betData: {
                     option: string;
-                    optionId: number;
-                    optionIndex: number;
-                    totalAmount: number;
-                    totalCount: number;
+                    optionid: number;
+                    optionindex: number;
+                    totalamount: number;
+                    totalcount: number;
                 }[] = [];
                 for (let i = 0; i < options.length; i++) {
                     const option = options[i];
-                    const optionIndex = i;
-                    const optionId = i + 1;
+                    const optionindex = i;
+                    const optionid = i + 1;
                     const validBets = bets.filter((bet) => bet.optionIndex == i);
-                    const totalCount = validBets.length;
-                    const totalAmount = validBets.reduce((acc, bet) => acc + bet.amount, 0);
-                    totalPoolAmount += totalAmount;
-                    if (winningOptions.includes(optionId)) {
-                        totalWinningPoolAmount += totalAmount;
+                    const totalcount = validBets.length;
+                    const totalamount = validBets.reduce((acc, bet) => acc + bet.amount, 0);
+                    totalPoolAmount += totalamount;
+                    if (winningOptions.includes(optionid)) {
+                        totalWinningPoolAmount += totalamount;
                     }
                     betData.push({
                         option,
-                        totalAmount,
-                        totalCount,
-                        optionIndex,
-                        optionId
+                        totalamount,
+                        totalcount,
+                        optionindex,
+                        optionid
                     });
                 }
 
@@ -206,27 +206,27 @@ const command: SlashCommand = {
                 const promises = [];
                 const winningOptionsIndices = [];
                 const winningOptionsAmounts = [];
-                const winners: { discordID: string; winnings: number }[] = [];
+                const winners: { discordid: string; winnings: number }[] = [];
                 for (let i = 0; i < winningOptions.length; i++) {
                     const winningOptionId = winningOptions[i];
-                    const winningOption = betData.find((j) => j.optionId == winningOptionId)!;
-                    const totalOptionWinnings = (winningOption.totalAmount / totalWinningPoolAmount) * totalPoolAmount;
+                    const winningOption = betData.find((j) => j.optionid == winningOptionId)!;
+                    const totalOptionWinnings = (winningOption.totalamount / totalWinningPoolAmount) * totalPoolAmount;
                     winningOptionsAmounts.push(totalOptionWinnings);
-                    winningOptionsIndices.push(winningOption.optionIndex);
+                    winningOptionsIndices.push(winningOption.optionindex);
 
-                    console.log(winningOption.optionIndex, totalOptionWinnings);
+                    console.log(winningOption.optionindex, totalOptionWinnings);
 
-                    const validBets = bets.filter((bet) => bet.optionIndex == winningOption.optionIndex);
+                    const validBets = bets.filter((bet) => bet.optionIndex == winningOption.optionindex);
                     promises.push(
                         validBets.map((validBet) => {
                             return new Promise<void>(async (resolve) => {
                                 const totalPlayerWinnings =
-                                    (validBet.amount / winningOption.totalAmount) * totalOptionWinnings;
+                                    (validBet.amount / winningOption.totalamount) * totalOptionWinnings;
                                 await prisma.player.update({
-                                    where: { discordID: validBet.playerID },
-                                    data: { dobbyPoints: { increment: totalPlayerWinnings } }
+                                    where: { discordid: validBet.playerid },
+                                    data: { dobbypoints: { increment: totalPlayerWinnings } }
                                 });
-                                winners.push({ discordID: validBet.playerID, winnings: totalPlayerWinnings });
+                                winners.push({ discordid: validBet.playerid, winnings: totalPlayerWinnings });
                                 return resolve();
                             });
                         })
@@ -240,7 +240,7 @@ const command: SlashCommand = {
                 const winnersText = topWinners
                     .map(
                         (winner) =>
-                            `- ${userMention(winner.discordID)} won ${winner.winnings.toFixed(2)} ${POINTS_EMOJI}`
+                            `- ${userMention(winner.discordid)} won ${winner.winnings.toFixed(2)} ${POINTS_EMOJI}`
                     )
                     .join("\n");
 

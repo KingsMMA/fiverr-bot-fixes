@@ -18,41 +18,41 @@ const command: SlashCommand = {
             await interaction.deferReply();
             const prisma = interaction.client.prisma;
             const settings = await prisma.setting.findFirst();
-            const { commandsChannelID, teamRoleID } = settings!;
+            const { commandschannelid, teamroleid } = settings!;
             const amount = interaction.options.getInteger("amount", true);
             const user = interaction.options.getUser("user", true);
             const channel = interaction.channel as TextChannel;
             const member = interaction.member as GuildMember;
 
-            if (channel.id !== commandsChannelID) {
-                throw Error(`You can only use this command in ${channelMention(commandsChannelID)}!`);
+            if (channel.id !== commandschannelid) {
+                throw Error(`You can only use this command in ${channelMention(commandschannelid)}!`);
             }
 
-            const isStaff = checkStaff(member, teamRoleID);
+            const isStaff = checkStaff(member, teamroleid);
             if (!isStaff) {
                 throw Error(`You are not allowed to use this command!`);
             }
 
-            const discordID = user.id;
-            const discordTag = user.tag;
+            const discordid = user.id;
+            const discordtag = user.tag;
 
             await prisma.player.upsert({
                 where: {
-                    discordID
+                    discordid
                 },
                 create: {
-                    discordID,
-                    discordTag,
-                    dobbyPoints: amount
+                    discordid,
+                    discordtag,
+                    dobbypoints: amount
                 },
                 update: {
-                    discordTag,
-                    dobbyPoints: { increment: amount }
+                    discordtag,
+                    dobbypoints: { increment: amount }
                 }
             });
 
             const content = `${userMention(interaction.user.id)} added ${amount} ${POINTS_EMOJI} to ${userMention(
-                discordID
+                discordid
             )}!`;
             await interaction.editReply({ content });
             await log({

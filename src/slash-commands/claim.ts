@@ -22,25 +22,25 @@ const command: SlashCommand = {
                 throw Error(`No lecture is currently ongoing!`);
             }
 
-            const discordID = interaction.user.id;
-            const discordTag = interaction.user.tag;
+            const discordid = interaction.user.id;
+            const discordtag = interaction.user.tag;
             const player = await prisma.player.upsert({
                 where: {
-                    discordID
+                    discordid
                 },
-                create: { discordID, discordTag },
-                update: { discordTag }
+                create: { discordid, discordtag },
+                update: { discordtag }
             });
             if (player.isClaimed) {
                 throw Error(`You have already claimed your ${POINTS_EMOJI} points!`);
             }
 
             await prisma.player.update({
-                where: { discordID },
+                where: { discordid },
                 data: { isClaimed: true, dobbyPoints: { increment: lectureRewards } }
             });
 
-            const content = `${userMention(discordID)} claimed their \`${lectureRewards}\` ${POINTS_EMOJI} points!`;
+            const content = `${userMention(discordid)} claimed their \`${lectureRewards}\` ${POINTS_EMOJI} points!`;
 
             await interaction.editReply({ content });
             await log({
