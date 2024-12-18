@@ -25,7 +25,7 @@ const event: BotEvent = {
         client.cache.set("shopMessageID", shopMessageID);
 
         cron.schedule(
-            "0 13 * * *",
+            "0 8 * * *",
             async () => {
                 const settings = await prisma.setting.findFirst();
                 if (settings!.resetCheckins) await resetCheckins(prisma, guild);
