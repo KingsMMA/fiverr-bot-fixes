@@ -10,45 +10,45 @@ datasource db {
 model Setting {
   id Int @id @default(1)
 
-  activityType ActivityTextType @default(Playing)
-  activityName String           @default("LOL Dobby")
+  activitytype ActivityTextType @default(Playing)
+  activityname String           @default("LOL Dobby")
 
-  resetCheckins Boolean @default(false)
+  resetcheckins Boolean @default(false)
 
-  checkinRewards          Int    @default(15)
-  checkinTargetCount      Int    @default(90)
-  checkinTargetRoleID     String @default("")
-  checkinMinimumMsgLength Int    @default(25)
-  checkinChannelID        String @default("")
+  checkinrewards          Int    @default(15)
+  checkintargetcount      Int    @default(90)
+  checkintargetroleid     String @default("")
+  checkinminimummsglength Int    @default(25)
+  checkinchannelid        String @default("")
 
-  moderatorRoleID String @default("")
-  teamRoleID      String @default("1236092244910407740")
+  moderatorroleid String @default("")
+  teamroleid      String @default("1236092244910407740")
 
-  commandsChannelID String @default("")
-  lectureChannelID  String @default("")
-  lectureRewards    Int    @default(10)
+  commandschannelid String @default("")
+  lecturechannelid  String @default("")
+  lecturerewards    Int    @default(10)
 
-  leaderboardMessageID String @default("")
-  leaderboardChannelID String @default("")
+  leaderboardmessageid String @default("")
+  leaderboardchannelid String @default("")
 
-  shopMessageID  String @default("")
-  shopChannelID  String @default("")
-  staffCHannelID String @default("1265956930833354772")
+  shopmessageid  String @default("")
+  shopchannelid  String @default("")
+  staffchannelid String @default("1265956930833354772")
 
-  oneEmojiPrice     Int @default(30)
-  twoVipTicketPrice Int @default(250)
-  three1v1Price     Int @default(300)
-  fourVodPrice      Int @default(600)
-  fiveBadgePrice    Int @default(1000)
-  sixSubPrice       Int @default(1250)
-  sevenFlipperPrice Int @default(1000)
-  eigthHevinixPrice Int @default(1500)
-  nineRpPrice       Int @default(2000)
+  oneemojiprice     Int @default(30)
+  twovipticketprice Int @default(250)
+  three1v1price     Int @default(300)
+  fourvodprice      Int @default(600)
+  fivebadgeprice    Int @default(1000)
+  sixsubprice       Int @default(1250)
+  sevenflipperprice Int @default(1000)
+  eigthhevinixprice Int @default(1500)
+  ninerpprice       Int @default(2000)
 
-  isLectureOngoing Boolean @default(false)
+  islectureongoing boolean @default(false)
 
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  createdat DateTime @default(now())
+  updatedat DateTime @updatedAt
 }
 
 enum ActivityTextType {
@@ -60,64 +60,64 @@ enum ActivityTextType {
 }
 
 model Player {
-  discordID  String @id
-  discordTag String
+  discordid  String @id
+  discordtag String
 
-  dobbyPoints    Int @default(0)
-  checkinStreak  Int @default(0)
-  previousStreak Int @default(0)
+  dobbypoints    Int @default(0)
+  checkinstreak  Int @default(0)
+  previousstreak Int @default(0)
 
-  isCheckedIn Boolean @default(false)
-  isClaimed   Boolean @default(false)
+  ischeckedin Boolean @default(false)
+  isclaimed   Boolean @default(false)
 
   bets PlayerBet[]
 
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  createdat DateTime @default(now())
+  updatedat DateTime @updatedAt
 }
 
 model Bet {
   id Int @id @default(autoincrement())
 
-  isOpen Boolean @default(true)
+  isopen Boolean @default(true)
 
-  messageID  String? @unique
-  channelID  String?
-  messageUrl String?
+  messageid  String? @unique
+  channelid  String?
+  messageurl String?
 
-  creatorID String
+  creatorid String
 
   title       String
   description String
   options     String[]
   amounts     Int[]
 
-  winningOptionsIndices Int[]
-  winningOptionsAmounts Float[]
-  winnersText           String  @default("")
+  winningoptionsindices Int[]
+  winningoptionsamounts Float[]
+  winnerstext           String  @default("")
 
   bets PlayerBet[]
 
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  createdat DateTime @default(now())
+  updatedat DateTime @updatedAt
 }
 
 model PlayerBet {
   id Int @id @default(autoincrement())
 
   player   Player @relation(fields: [playerID], references: [discordID], onDelete: Cascade)
-  playerID String
+  playerid String
 
   bet   Bet @relation(fields: [betID], references: [id], onDelete: Cascade)
-  betID Int
+  betid Int
 
-  optionIndex Int
+  optionindex Int
   amount      Int
 
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  createdat DateTime @default(now())
+  updatedat DateTime @updatedAt
 
-  @@unique([betID, playerID])
+  @@unique([betid, playerid])
 }
 
 model Item {
@@ -129,50 +129,50 @@ model Item {
   price       Int
   emoji       String  @default("<:forex:1265969777462083646>")
 
-  userMessage  String
-  staffPing    String
-  staffMessage String
+  usermessage  String
+  staffping    String
+  staffmessage String
 
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  createdat DateTime @default(now())
+  updatedat DateTime @updatedAt
 }
 
 model Event {
   id        Int       @id @default(autoincrement())
   code      String    @unique // Add this field for short unique code
   type      EventType
-  startTime DateTime
-  endTime   DateTime?
+  starttime DateTime
+  endtime   DateTime?
   duration  Int? // Duration in minutes
 
-  channelId   String
-  channelName String
+  channelid   String
+  channelname String
 
-  hostId  String
-  hostTag String
+  hostid  String
+  hosttag String
 
-  attendeeCount Int @default(0)
+  attendeecount Int @default(0)
 
   attendees EventAttendee[]
 
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  createdat DateTime @default(now())
+  updatedat DateTime @updatedAt
 }
 
 model EventAttendee {
   id      Int   @id @default(autoincrement())
   event   Event @relation(fields: [eventId], references: [id])
-  eventId Int
+  eventid Int
 
   // Attendee info
-  userId  String
-  userTag String
+  userid  String
+  usertag String
 
   // Track join/leave times
-  joinTime  DateTime
-  leaveTime DateTime?
+  jointime  DateTime
+  leavetime DateTime?
 
-  @@unique([eventId, userId]) // Ensure one record per user per event
+  @@unique([eventid, userid]) // Ensure one record per user per event
 }
 
 enum EventType {
