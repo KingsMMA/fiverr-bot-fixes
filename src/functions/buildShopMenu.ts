@@ -9,7 +9,7 @@ export default function buildShopMenu(prisma: PrismaClient) {
         const options = items.map((v) => {
             return new StringSelectMenuOptionBuilder()
                 .setLabel(v.title)
-                .setDescription(`Price: ${v.price} dobby points`)
+                .setDescription(`Price: ${v.price}`)
                 .setEmoji(POINTS_EMOJI)
                 .setValue(`${v.id}`);
         });
