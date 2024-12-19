@@ -76,7 +76,7 @@ const event: BotEvent = {
             if (newStreak === 90 || newStreak === 180) {
                 message.client.channels.fetch(settings!.staffChannelID)
                     .then(channel => (channel as GuildTextBasedChannel).send({
-                        content: `<@125798125636943872> <@${discordID}> has reached the target of ${newStreak} consecutive daily checkins and received the <@&${settings!.checkinTargetRoleID}> role!`
+                        content: `<@125798125636943872> <@${discordID}> has reached the target of \`${newStreak}\` consecutive daily checkins and received the <@&${settings!.checkinTargetRoleID}> role!`
                     })).then(() => message.member?.roles.add(settings!.checkinTargetRoleID))
                     .catch(console.error);
             }
