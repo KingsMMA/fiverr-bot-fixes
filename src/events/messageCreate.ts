@@ -1,4 +1,4 @@
-import { Events, Message, userMention } from "discord.js";
+import {Events, GuildTextBasedChannel, Message, userMention} from "discord.js";
 import { BotEvent } from "../types";
 import { delay } from "../utils/delay";
 import { POINTS_EMOJI } from "../config";
@@ -72,6 +72,15 @@ const event: BotEvent = {
             )} has checked in for ${newStreak} consecutive day(s) and been awarded ${checkinRewards} ${POINTS_EMOJI} points`;
 
             await log({ title: "Check-in", content, color: "Orange" });
+
+            if (newStreak === 90 || newStreak === 180) {
+                message.client.channels.fetch(settings!.staffChannelID)
+                    .then(channel => (channel as GuildTextBasedChannel).send({
+                        content: `<@125798125636943872> <@${discordID}> has reached the target of ${newStreak} consecutive daily checkins and received the <@&${settings!.checkinTargetRoleID}> role!`
+                    })).then(() => message.member?.roles.add(settings!.checkinTargetRoleID))
+                    .catch(console.error);
+            }
+
             const msg = await message.reply({ content: `${content}` });
             await delay(5000);
             await msg.delete().catch(console.error);
