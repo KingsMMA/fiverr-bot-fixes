@@ -18,7 +18,7 @@ If you write one comment underneath this you will gain ${checkinRewards} Dobby P
 
 If you check-in here for ${checkinTargetCount} consecutive periods, you'll earn ${roleMention(
             checkinTargetRoleID
-        )} & **1 free month**.
+        )} & **1 free month**. 180 days will gift 2 free months.
 
 > Replies don't have to be high quality, but we do ask that you refrain from low-quality and if you must post something short that at the very least it's a full sentence. Can be whatever's on your mind or just something positive :)
 
