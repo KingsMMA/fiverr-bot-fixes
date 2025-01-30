@@ -1,7 +1,7 @@
 import { Client, Guild, TextChannel } from "discord.js";
 import { BotEvent } from "../types";
 import setActivity from "../functions/setActivity";
-import cron from "node-cron";
+import { CronJob } from "cron";
 import { buildCheckinLeaderboardEmbed, buildPointsLeaderboardEmbed } from "../functions/buildLeaderboardEmbed";
 import { PrismaClient } from "@prisma/client";
 import resetCheckins from "../functions/resetCheckins";
@@ -24,13 +24,15 @@ const event: BotEvent = {
         client.cache.set("checkinChannelID", checkinChannelID);
         client.cache.set("shopMessageID", shopMessageID);
 
-        cron.schedule(
+        new CronJob(
             "0 8 * * *",
             async () => {
                 const settings = await prisma.setting.findFirst();
                 if (settings!.resetCheckins) await resetCheckins(prisma, guild);
             },
-            { timezone: "America/New_York" }
+            null,
+            true,
+            "America/New_York"
         );
     }
 };
