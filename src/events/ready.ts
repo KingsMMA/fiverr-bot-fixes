@@ -32,7 +32,7 @@ const event: BotEvent = {
 
         console.log('Scheduling job:')
         const job = new CronJob(
-            "0 10 * * *",
+            "0 8 * * *",
             async () => {
                 try {
                     console.log("Job called.");
