@@ -4,24 +4,32 @@ import buildCheckinEmbed from "./buildCheckinEmbed";
 import log from "../utils/log";
 
 export default async function resetCheckins(prisma: PrismaClient, guild: Guild) {
+    console.log("Reset checkins called.")
     return new Promise<void>(async (resolve) => {
+        console.log("Starting promise...")
         const settings = await prisma.setting.findFirst();
+        console.log("Promise > A")
 
         if (!settings) {
+            console.log("Promise > B")
             return resolve();
         }
 
         const channel = (await guild.channels.fetch(settings.checkinChannelID)) as TextChannel;
         let fetched: Collection<Snowflake, Message>;
 
+        console.log("Promise > C")
         do {
+            console.log("Promise > D")
             const messages = await channel.messages.fetch({ limit: 100 });
             fetched = messages;
             await Promise.allSettled(messages.map((m) => m.delete()));
+            console.log("Promise > E")
         } while (fetched.size >= 2);
 
         const embed = await buildCheckinEmbed(prisma);
         await channel.send({ embeds: [embed] });
+        console.log("Promise > F")
 
         const totalPlayerCount = await prisma.player.count();
 
@@ -31,6 +39,7 @@ export default async function resetCheckins(prisma: PrismaClient, guild: Guild) 
                 checkinStreak: 0
             }
         });
+        console.log("Promise > G")
 
         const playersToReset = await prisma.player.findMany({
             where: { isCheckedIn: false, checkinStreak: { gt: 0 } },
@@ -52,13 +61,16 @@ export default async function resetCheckins(prisma: PrismaClient, guild: Guild) 
             where: { isCheckedIn: true },
             data: { isCheckedIn: false }
         });
+        console.log("Promise > H")
 
         const content = `
 **${checkedinPlayers.count}/${totalPlayerCount}** players checked in yesterday and have increased their progress +1
 **${notCheckedinPlayers.count}/${totalPlayerCount}** failed to check in yesterday and reset their progress back to 0
 **${idlePlayerCount}/${totalPlayerCount}** players are idle and also did not check in yesterday`;
 
+        console.log("Promise > I")
         await log({ title: "Check-in Reset", content, color: "Purple" });
+        console.log("Promise > J")
         return resolve();
     });
 }

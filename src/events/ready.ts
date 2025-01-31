@@ -6,6 +6,12 @@ import { buildCheckinLeaderboardEmbed, buildPointsLeaderboardEmbed } from "../fu
 import { PrismaClient } from "@prisma/client";
 import resetCheckins from "../functions/resetCheckins";
 
+declare module "discord.js" {
+    interface Client {
+        resetCheckinsJob?: CronJob;
+    }
+}
+
 const event: BotEvent = {
     name: "ready",
     once: true,
@@ -24,16 +30,33 @@ const event: BotEvent = {
         client.cache.set("checkinChannelID", checkinChannelID);
         client.cache.set("shopMessageID", shopMessageID);
 
-        new CronJob(
-            "0 8 * * *",
+        console.log('Scheduling job:')
+        const job = new CronJob(
+            "0 10 * * *",
             async () => {
-                const settings = await prisma.setting.findFirst();
-                if (settings!.resetCheckins) await resetCheckins(prisma, guild);
+                try {
+                    console.log("Job called.");
+                    console.log("Job called > A");
+                    const settings = await prisma.setting.findFirst();
+                    console.log("Job called > B");
+                    if (settings!.resetCheckins) {
+                        console.log("Job called > C");
+                        await resetCheckins(prisma, guild);
+                        console.log("Job called > D");
+                    }
+                    console.log("Job called > E");
+                } catch (e) {
+                    console.error("Cron job error")
+                    console.error(e)
+                    console.error("Cron job error:", e)
+                }
             },
             null,
             true,
             "America/New_York"
         );
+        client.resetCheckinsJob = job;
+        console.log('Job should be started.');
     }
 };
 
