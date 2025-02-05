@@ -7,15 +7,15 @@ export default async function resetCheckins(prisma: PrismaClient, guild: Guild) 
     console.log("Reset checkins called.")
     return new Promise<void>(async (resolve) => {
         console.log("Starting promise...")
-        const settings = await prisma.setting.findFirst();
+        // const settings = await prisma.setting.findFirst();
         console.log("Promise > A")
 
-        if (!settings) {
-            console.log("Promise > B")
-            return resolve();
-        }
+        // if (!settings) {
+        //     console.log("Promise > B")
+        //     return resolve();
+        // }
 
-        const channel = (await guild.channels.fetch(settings.checkinChannelID)) as TextChannel;
+        const channel = (await guild.channels.fetch('1248079696231665724')) as TextChannel;
         let fetched: Collection<Snowflake, Message>;
 
         console.log("Promise > C")

@@ -37,13 +37,10 @@ const event: BotEvent = {
                 try {
                     console.log("Job called.");
                     console.log("Job called > A");
-                    const settings = await prisma.setting.findFirst();
                     console.log("Job called > B");
-                    if (settings!.resetCheckins) {
-                        console.log("Job called > C");
-                        await resetCheckins(prisma, guild);
-                        console.log("Job called > D");
-                    }
+                    console.log("Job called > C");
+                    await resetCheckins(prisma, guild);
+                    console.log("Job called > D");
                     console.log("Job called > E");
                 } catch (e) {
                     console.error("Cron job error")
